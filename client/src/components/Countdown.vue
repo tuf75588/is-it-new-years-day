@@ -1,34 +1,57 @@
 <template>
   <div>
-    <p class="yes-no">NO</p>
+    <p class="yes-no">{{ isNewYearsDay }}</p>
     <p class="time-left">{{ currentTime }}</p>
   </div>
 </template>
 
 <script>
-// import { formatDistance } from 'date-fns';
 import { ref } from '@vue/composition-api';
+import { formatDistanceToNow } from 'date-fns';
+
+const formatOptions = {
+  addSuffix: true,
+  includeSeconds: true,
+};
 
 export default {
-  // data: () => ({
-  //   currentTime: new Date().toLocaleString(),
-  // }),
-  // created() {
-  //   setInterval(() => {
-  //     this.currentTime = new Date().toLocaleString();
-  //   }, 500);
-  // },
   name: 'Countdown',
   setup() {
-    const currentTime = ref(new Date().toLocaleString());
     const today = new Date();
-    // eslint-disable-next-line no-unused-vars
-    const newYearsDay = new Date(today.getFullYear() + 1, 1, 1);
+    const newYearsDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 2,
+      today.getHours(),
+      today.getMinutes(),
+      today.getSeconds(),
+    );
+    const dayAfterNewYears = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 1,
+      today.getHours(),
+      today.getMinutes(),
+      today.getSeconds(),
+    );
+    const currentTime = ref('Maybe?');
+    const isNewYearsDay = ref('');
+
     setInterval(() => {
-      currentTime.value = new Date().toLocaleString();
+      const now = new Date();
+      currentTime.value = formatDistanceToNow(newYearsDay, formatOptions);
+      if (now < newYearsDay || now >= dayAfterNewYears) {
+        isNewYearsDay.value = 'NO 😟';
+        currentTime.value = `It's new years in ${formatDistanceToNow(newYearsDay)}`;
+      } else if (now >= newYearsDay) {
+        isNewYearsDay.value = 'YES 🎉';
+        currentTime.value = `It's been new years for ${formatDistanceToNow(newYearsDay)}`;
+      }
     }, 500);
+
     return {
       currentTime,
+      isNewYearsDay,
     };
   },
 };
