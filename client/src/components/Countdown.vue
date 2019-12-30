@@ -1,13 +1,16 @@
 <template>
   <div>
-    <p class="yes-no">{{ isNewYearsDay }}</p>
+    <div v-if="ready">
+      <p class="yes-no" v-if="isNewYearsDay">YES</p>
+      <p class="yes-no" v-else>No</p>
+    </div>
     <p class="time-left">{{ currentTime }}</p>
   </div>
 </template>
 
 <script>
 import { ref } from '@vue/composition-api';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, isSameDay } from 'date-fns';
 
 const formatOptions = {
   addSuffix: true,
@@ -17,39 +20,32 @@ const formatOptions = {
 export default {
   name: 'Countdown',
   setup() {
-    const today = new Date();
-    const newYearsDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - 2,
-      today.getHours(),
-      today.getMinutes(),
-      today.getSeconds(),
-    );
-    const dayAfterNewYears = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - 1,
-      today.getHours(),
-      today.getMinutes(),
-      today.getSeconds(),
-    );
+    const ready = ref(false);
+    const now = new Date();
     const currentTime = ref('Maybe?');
-    const isNewYearsDay = ref('');
-
+    const isNewYearsDay = ref(isSameDay(now, new Date(now.getFullYear(), 0, 1)));
+    let newYearsDay = new Date(now.getFullYear() + 1, 0, 1);
     setInterval(() => {
+      ready.value = true;
+      // eslint-disable-next-line
       const now = new Date();
-      currentTime.value = formatDistanceToNow(newYearsDay, formatOptions);
-      if (now < newYearsDay || now >= dayAfterNewYears) {
-        isNewYearsDay.value = 'NO 😟';
-        currentTime.value = `It's new years in ${formatDistanceToNow(newYearsDay)}`;
-      } else if (now >= newYearsDay) {
-        isNewYearsDay.value = 'YES 🎉';
-        currentTime.value = `It's been new years for ${formatDistanceToNow(newYearsDay)}`;
+      isNewYearsDay.value = isSameDay(now, new Date(now.getFullYear(), 0, 1));
+      if (isNewYearsDay.value) {
+        // it's new years!
+        newYearsDay = new Date(now.getFullYear(), 0, 1);
+        isNewYearsDay.value = true;
+        currentTime.value = `It's been new years day for ${formatDistanceToNow(newYearsDay)}`;
+        document.title = 'YES!! 💃🎉🎈';
+      } else {
+        newYearsDay = new Date(now.getFullYear() + 1, 0, 1);
+        isNewYearsDay.value = false;
+        currentTime.value = formatDistanceToNow(newYearsDay, formatOptions);
+        document.title = currentTime.value;
       }
     }, 500);
 
     return {
+      ready,
       currentTime,
       isNewYearsDay,
     };
