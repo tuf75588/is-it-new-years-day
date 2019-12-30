@@ -2,7 +2,7 @@
   <div>
     <div v-if="ready">
       <p class="yes-no" v-if="isNewYearsDay">YES</p>
-      <p class="yes-no" v-else>No</p>
+      <p class="yes-no" v-else>NO</p>
     </div>
     <p class="time-left">{{ currentTime }}</p>
   </div>
@@ -16,13 +16,11 @@ const formatOptions = {
   addSuffix: true,
   includeSeconds: true,
 };
-
 export default {
-  name: 'Countdown',
   setup() {
     const ready = ref(false);
+    const currentTime = ref('Maybe...');
     const now = new Date();
-    const currentTime = ref('Maybe?');
     const isNewYearsDay = ref(isSameDay(now, new Date(now.getFullYear(), 0, 1)));
     let newYearsDay = new Date(now.getFullYear() + 1, 0, 1);
     setInterval(() => {
@@ -31,11 +29,10 @@ export default {
       const now = new Date();
       isNewYearsDay.value = isSameDay(now, new Date(now.getFullYear(), 0, 1));
       if (isNewYearsDay.value) {
-        // it's new years!
         newYearsDay = new Date(now.getFullYear(), 0, 1);
         isNewYearsDay.value = true;
-        currentTime.value = `It's been new years day for ${formatDistanceToNow(newYearsDay)}`;
-        document.title = 'YES!! 💃🎉🎈';
+        currentTime.value = `It's been New Years day for ${formatDistanceToNow(newYearsDay)}`;
+        document.title = 'YES';
       } else {
         newYearsDay = new Date(now.getFullYear() + 1, 0, 1);
         isNewYearsDay.value = false;
@@ -43,7 +40,6 @@ export default {
         document.title = currentTime.value;
       }
     }, 500);
-
     return {
       ready,
       currentTime,
@@ -59,7 +55,6 @@ export default {
   text-align: center;
   font-size: calc(2rem + 8vmin);
 }
-.question,
 .time-left {
   text-align: center;
   font-size: calc(1rem + 4vmin);
