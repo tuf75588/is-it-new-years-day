@@ -9,8 +9,12 @@
 </template>
 
 <script>
+/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable space-before-function-paren */
 import { ref } from '@vue/composition-api';
 import { formatDistanceToNow, isSameDay } from 'date-fns';
+import io from 'socket.io-client';
 
 const formatOptions = {
   addSuffix: true,
@@ -19,6 +23,9 @@ const formatOptions = {
 export default {
   setup() {
     const ready = ref(false);
+    // eslint-disable-next-line
+    const socket = io('http://localhost:8000');
+    socket.on('connect', () => console.log('connected!'));
     const currentTime = ref('Maybe...');
     const now = new Date();
     const isNewYearsDay = ref(isSameDay(now, new Date(now.getFullYear(), 0, 1)));
