@@ -20,6 +20,7 @@ const formatOptions = {
   addSuffix: true,
   includeSeconds: true,
 };
+
 export default {
   setup() {
     const ready = ref(false);

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <span class="mouse" :style="{ transform }">🐭</span>
+    <span class="mouse" :style="{ transform }"
+      ><img src="https://twemoji.maxcdn.com/v/latest/72x72/1f49a.png"
+    /></span>
     <pre>{{ location }}</pre>
   </div>
 </template>
@@ -21,7 +23,7 @@ export default {
 
     // eslint-disable-next-line arrow-body-style
     const transform = computed(() => {
-      return `translate(${location.x}px,${location.y}px)`;
+      return `translate(-50%, -50%) translate(${location.x}px,${location.y}px)`;
     });
 
     // listen for mouse movements
@@ -45,5 +47,6 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  transition: transform 1ms ease-in-out;
 }
 </style>

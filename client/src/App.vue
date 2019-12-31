@@ -24,6 +24,7 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  cursor: none;
 }
 #app {
   width: 100%;
