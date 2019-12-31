@@ -2,7 +2,18 @@ const socketIO = require('socket.io');
 
 module.exports = (server) => {
   const io = socketIO(server);
+  const state = {};
   io.on('connection', (socket) => {
-    console.log('a user has connected!');
+    socket.on('location', (location) => {
+      console.log({ location });
+      state[socket.id] = location;
+    });
+    socket.on('disconnect', () => {
+      console.log('A user has disconnected', socket.id);
+      delete state[socket.id];
+    });
   });
+  setInterval(() => {
+    io.emit('state', state);
+  }, 1000);
 };
