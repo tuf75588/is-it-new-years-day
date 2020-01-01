@@ -10,10 +10,16 @@ import Mouse from './Mouse.vue';
 
 export default {
   setup({ socket }) {
-    console.log('socket', socket.id);
     const clients = computed(() => []);
     socket.on('state', (state) => {
-      console.log(state);
+      // eslint-disable-next-line no-shadow
+      // eslint-disable-next-line arrow-body-style
+      clients.values = Object.entries(state).map(([id, client]) => {
+        return {
+          id,
+          transform: `${id}px`,
+        };
+      });
     });
   },
   props: ['transform', 'socket'],
