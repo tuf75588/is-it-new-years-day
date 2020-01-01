@@ -5,7 +5,6 @@ module.exports = (server) => {
   const state = {};
   io.on('connection', (socket) => {
     socket.on('location', (location) => {
-      console.log({ location });
       state[socket.id] = location;
     });
     socket.on('disconnect', () => {

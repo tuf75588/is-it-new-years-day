@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span class="mouse" :style="{ transform }"
-      ><img src="https://twemoji.maxcdn.com/v/latest/72x72/1f49a.png"
-    /></span>
+    <mouse :transform="transform" />
     <pre>{{ location }}</pre>
   </div>
 </template>
@@ -11,18 +9,23 @@
 /* TODO: if we haven't moved, don't emit an event */
 
 import { reactive, computed } from '@vue/composition-api';
-import io from 'socket.io-client';
-import API_URL from '../API_URL';
+
+import Mouse from './Mouse.vue';
 
 if (!Math.clamp) Math.clamp = (val, min, max) => Math.min(max, Math.max(val, min));
 
 export default {
-  setup() {
+  components: {
+    Mouse,
+  },
+  props: ['socket'],
+  setup({ socket }) {
+    console.log(socket);
     // eslint-disable-next-line
-    const socket = io(API_URL);
+
     const location = reactive({
       x: window.innerWidth / 2,
-      // y: window.innerHeigh / 2,
+      y: window.innerHeigh / 2,
     });
     // if lastLocation equals location, we haven't moved
     const lastLocation = reactive({
@@ -47,7 +50,7 @@ export default {
     }
     // eslint-disable-next-line arrow-body-style
     const transform = computed(() => {
-      return `translate(-50%, -50%) translate(${location.x}px,${location.y}px)`;
+      return `translate(-50%, -50%) translate(${location.x}px, ${location.y}px)`;
     });
 
     // listen for mouse movements
@@ -68,11 +71,4 @@ export default {
 };
 </script>
 
-<style>
-.mouse {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 1ms ease-in-out;
-}
-</style>
+<style></style>

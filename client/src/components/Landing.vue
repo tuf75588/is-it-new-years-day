@@ -1,19 +1,30 @@
 <template>
   <div class="landing">
-    <mouse-listener />
-    <Countdown />
+    <countdown />
+    <mouse-listener :socket="socket" />
+    <client-state :socket="socket" />
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client';
+import API_URL from '../API_URL';
 import Countdown from './Countdown.vue';
 import MouseListener from './MouseListener.vue';
+import ClientState from './ClientState.vue';
 
 export default {
   name: 'Landing',
   components: {
     Countdown,
     MouseListener,
+    ClientState,
+  },
+  setup() {
+    const socket = io(API_URL);
+    return {
+      socket,
+    };
   },
 };
 </script>
