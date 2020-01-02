@@ -14,5 +14,5 @@ module.exports = (server) => {
   });
   setInterval(() => {
     io.emit('state', state);
-  }, 1000);
+  }, 500);
 };
