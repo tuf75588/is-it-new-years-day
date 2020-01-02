@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mouse :transform="transform" />
+    <mouse :isMine="true" />
     <pre>{{ location }}</pre>
   </div>
 </template>

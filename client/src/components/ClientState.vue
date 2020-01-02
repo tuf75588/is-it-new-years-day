@@ -1,26 +1,35 @@
 <template>
   <div>
-    <mouse v-for="client in clients" :transform="client.transform" :key="client.id" />
+    <mouse
+      v-for="client in clients"
+      :isSmooth="true"
+      :location="client.location"
+      :key="client.id"
+    />
   </div>
 </template>
 
 <script>
-import { computed } from '@vue/composition-api';
+/* eslint-disable array-callback-return */
+import { ref, computed } from '@vue/composition-api';
 import Mouse from './Mouse.vue';
 
 export default {
   setup({ socket }) {
-    const clients = computed(() => []);
+    const clientsById = ref({});
+    const clients = computed(() => Object.entries(clientsById.value));
     socket.on('state', (state) => {
       // eslint-disable-next-line no-shadow
       // eslint-disable-next-line arrow-body-style
-      clients.values = Object.entries(state).map(([id, client]) => {
-        return {
-          id,
-          transform: `${id}px`,
-        };
-      });
+      clientsById.value = Object.entries(state).reduce((all, [id, client]) => {
+        if (id !== socket.id) {
+          all.push({ id, location: { x: client.x, y: client.y } });
+        }
+      }, []);
     });
+    return {
+      clients,
+    };
   },
   props: ['transform', 'socket'],
   components: {
