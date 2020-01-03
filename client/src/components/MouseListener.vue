@@ -1,7 +1,6 @@
 <template>
   <div>
     <mouse :transform="transform" />
-    <pre>{{ location }}</pre>
   </div>
 </template>
 
@@ -20,7 +19,6 @@ export default {
   },
   props: ['socket'],
   setup({ socket }) {
-    console.log(socket);
     // eslint-disable-next-line
 
     const location = reactive({

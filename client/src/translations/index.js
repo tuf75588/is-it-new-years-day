@@ -1,6 +1,7 @@
 /* Thanks so much to the CodingGarden community for these translations,
    without them, this wouldn't be possible. https://youtube.com/codinggardenwithcj
 */
+/* eslint-disable */
 
 const allTranslations = require('../translations.json');
 
@@ -12,6 +13,7 @@ const translateTimeAllPlural = ({ translations, values }) =>
   }, '');
 
 const translateCommonWithPlural = ({ translations, values }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
   Object.entries(values).reduce((all, [prop, value]) => {
     if (!value) return all;
     let unit = translations[prop];
@@ -21,6 +23,7 @@ const translateCommonWithPlural = ({ translations, values }) =>
     return `${all} ${value} ${unit}`;
   }, '');
 
+// eslint-disable-next-line object-curly-newline
 const english = ({ isNewYearsDay, months, days, hours, minutes, seconds }) => {
   const timeLeft = translateCommonWithPlural({
     translations: {
